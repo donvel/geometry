@@ -1,47 +1,53 @@
-#include "testApp.h"
+#include "imageParser.h"
+
 
 //--------------------------------------------------------------
-void testApp::setup(){
+void imageParser::setup(){
 	
-	camWidth 		= 320;	// try to grab at this size. 
-	camHeight 		= 240;
+	if(USER_INPUT) {
+		cout << "Please enter camera resolution (W H)" << endl;
+		cin >> camWidth >> camHeight;
+	} else {
+		camWidth = 640, camHeight = 480;
+	}
+
 	
 	vidGrabber.setVerbose(true);
 	vidGrabber.initGrabber(camWidth,camHeight);
 	
-	videoInverted 	= new unsigned char[camWidth*camHeight*3];
+	videoRemapped 	= new unsigned char[camWidth*camHeight*3];
 	videoTexture.allocate(camWidth,camHeight, GL_RGB);	
+
+	Mode = ALIGN;
 }
 
 
 //--------------------------------------------------------------
-void testApp::update(){
+void imageParser::update(){
 	
 	ofBackground(100,100,100);
 	
 	vidGrabber.grabFrame();
 	
 	if (vidGrabber.isFrameNew()){
-		int totalPixels = camWidth*camHeight*3;
 		unsigned char * pixels = vidGrabber.getPixels();
-		for (int i = 0; i < totalPixels; i++){
-			videoInverted[i] = 255 - pixels[i];
-		}
-		videoTexture.loadData(videoInverted, camWidth,camHeight, GL_RGB);
+		remap(videoRemapped, pixels);
+
+		videoTexture.loadData(videoRemapped, camWidth,camHeight, GL_RGB);
 	}
 
 }
 
 //--------------------------------------------------------------
-void testApp::draw(){
-	ofSetHexColor(0xffffff);
+void imageParser::draw(){
+	ofSetHexColor(0xffffff); // This should be positioned in a more clever way
 	vidGrabber.draw(20,20);
-	videoTexture.draw(20+camWidth,20,camWidth,camHeight);
+	if(Mode == DISPLAY) videoTexture.draw(20+camWidth,20,camWidth,camHeight);
 }
 
 
 //--------------------------------------------------------------
-void testApp::keyPressed  (int key){ 
+void imageParser::keyPressed  (int key){ 
 	
 	// in fullscreen mode, on a pc at least, the 
 	// first time video settings the come up
@@ -50,48 +56,58 @@ void testApp::keyPressed  (int key){
 	// window. we are working on a fix for this...
 	
 	if (key == 's' || key == 'S'){
-		vidGrabber.videoSettings();
+		vidGrabber.videoSettings(); // doesn't work at all, anyway
 	}
 	
+	if (key == 'a' || key == 'A'){
+		Mode = DISPLAY;
+	}
+	
+}
+
+void imageParser::remap(unsigned char * from, unsigned char * to) {
+	int totalPixels = camWidth*camHeight*3;
+}
+
+
+// OBSOLETE The rest of functions is not needed.
+
+//--------------------------------------------------------------
+void imageParser::keyReleased(int key){ 
 	
 }
 
 //--------------------------------------------------------------
-void testApp::keyReleased(int key){ 
+void imageParser::mouseMoved(int x, int y ){
 	
 }
 
 //--------------------------------------------------------------
-void testApp::mouseMoved(int x, int y ){
+void imageParser::mouseDragged(int x, int y, int button){
 	
 }
 
 //--------------------------------------------------------------
-void testApp::mouseDragged(int x, int y, int button){
+void imageParser::mousePressed(int x, int y, int button){
 	
 }
 
 //--------------------------------------------------------------
-void testApp::mousePressed(int x, int y, int button){
-	
-}
-
-//--------------------------------------------------------------
-void testApp::mouseReleased(int x, int y, int button){
+void imageParser::mouseReleased(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::windowResized(int w, int h){
+void imageParser::windowResized(int w, int h){
 
 }
 
 //--------------------------------------------------------------
-void testApp::gotMessage(ofMessage msg){
+void imageParser::gotMessage(ofMessage msg){
 
 }
 
 //--------------------------------------------------------------
-void testApp::dragEvent(ofDragInfo dragInfo){ 
+void imageParser::dragEvent(ofDragInfo dragInfo){ 
 
 }

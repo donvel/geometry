@@ -1,16 +1,28 @@
+/* Interactive CV-driven geometry environment */
+
 #include "ofMain.h"
-#include "testApp.h"
+#include "imageParser.h"
 #include "ofAppGlutWindow.h"
+#include <cstdio>
+
+int sWidth, sHeight;
 
 //========================================================================
-int main( ){
+int main() {
+
+	if(USER_INPUT) {
+		cout << "Please enter window resolution (W H)" << endl;
+		cin >> sWidth >> sHeight;
+	} else {
+		sWidth = 1024, sHeight = 768;
+	}
 
     ofAppGlutWindow window;
-	ofSetupOpenGL(&window, 1024,768, OF_WINDOW);			// <-------- setup the GL context
 
-	// this kicks off the running of my app
+	ofSetupOpenGL(&window, sWidth, sHeight, OF_WINDOW);
+
 	// can be OF_WINDOW or OF_FULLSCREEN
-	// pass in width and height too:
-	ofRunApp( new testApp());
+
+	ofRunApp( new imageParser());
 
 }

@@ -1,8 +1,9 @@
 #pragma once
 
 #include "ofMain.h"
+#include "parameters.h"
 
-class testApp : public ofBaseApp{
+class imageParser : public ofBaseApp{
 	
 	public:
 		
@@ -21,8 +22,14 @@ class testApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);		
 		
 		ofVideoGrabber 		vidGrabber;
-		unsigned char * 	videoInverted;
+		unsigned char * 	videoRemapped;
 		ofTexture			videoTexture;
 		int 				camWidth;
 		int 				camHeight;
+
+		// Stuff added to the testApp by me
+
+		enum mode {ALIGN, DISPLAY};
+		mode Mode;
+		void remap(unsigned char * from, unsigned char * to);
 };
