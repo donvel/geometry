@@ -1,9 +1,12 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofGraphics.h"
+#include "ofVec2f.h"
 #include "parameters.h"
+#include "point.h"
 
-class imageParser : public ofBaseApp{
+class imageParser : public ofBaseApp {
 	
 	public:
 		
@@ -28,8 +31,13 @@ class imageParser : public ofBaseApp{
 		int 				camHeight;
 
 		// Stuff added to the testApp by me
+		int 				worWidth;
+		int 				worHeight;
 
-		enum mode {ALIGN, DISPLAY};
+		enum mode {ADJUST, DISPLAY};
 		mode Mode;
 		void remap(unsigned char * from, unsigned char * to);
+		Point getCoords(Point p);
+		ofVec2f rect[4];
+		int pointNum;
 };
